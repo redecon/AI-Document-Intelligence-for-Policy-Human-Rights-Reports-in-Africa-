@@ -1,0 +1,45 @@
+corruption:
+  - fraud
+  - irregularity
+  - misappropriation
+  - corruption
+  - embezzlement
+
+financial:
+  - budget
+  - expenditure
+  - allocation
+  - revenue
+  - deficit
+
+legal:
+  - proclamation
+  - act
+  - article
+  - regulation
+  - decree
+
+policy:
+  - policy
+  - governance
+  - reform
+  - legislation
+
+human_rights:
+  - freedom of
+  - human rights
+  - violation
+  - dignity
+  - equality
+
+procurement:
+  - contract
+  - procurement
+  - tender
+  - bid
+
+media:
+  - investigative
+  - journalism
+  - press
+  - censorship
