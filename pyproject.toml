@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "refinery"
+version = "0.1.0"
+description = "Document Intelligence Refinery for civic audits and reports"
+authors = [{ name = "Rediet" }]
+dependencies = [
+    "pydantic>=2.0",
+    "pytesseract",
+    "pillow",
+    "pyyaml",
+    "fasttext",
+    "pdfplumber",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.exclude-package-data]
+"*" = ["*.csv", "*.png", "*.bin"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

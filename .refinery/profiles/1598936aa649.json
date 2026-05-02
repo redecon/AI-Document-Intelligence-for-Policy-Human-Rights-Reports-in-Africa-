@@ -1,0 +1,32 @@
+{
+  "document_id": "1598936aa649",
+  "origin_type": "native_digital",
+  "layout_complexity": "multi_column",
+  "languages": [
+    {
+      "lang_code": "en",
+      "confidence": 0.6780120134353638
+    },
+    {
+      "lang_code": "pt",
+      "confidence": 0.023584969341754913
+    },
+    {
+      "lang_code": "fr",
+      "confidence": 0.020282702520489693
+    }
+  ],
+  "primary_language": "unknown",
+  "domain_hint": "financial_transparency",
+  "sensitivity": "medium",
+  "data_quality_score": 80.0,
+  "estimated_extraction_cost": "needs_layout_model",
+  "has_toc": true,
+  "page_count": 60,
+  "corruption_indicators": [],
+  "financial_terms": [
+    "expenditure",
+    "revenue"
+  ],
+  "legal_refs": []
+}

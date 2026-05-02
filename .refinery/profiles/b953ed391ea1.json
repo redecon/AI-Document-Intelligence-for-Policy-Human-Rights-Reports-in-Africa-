@@ -1,0 +1,31 @@
+{
+  "document_id": "b953ed391ea1",
+  "origin_type": "native_digital",
+  "layout_complexity": "multi_column",
+  "languages": [
+    {
+      "lang_code": "fr",
+      "confidence": 0.9891270995140076
+    },
+    {
+      "lang_code": "en",
+      "confidence": 0.002387519460171461
+    },
+    {
+      "lang_code": "de",
+      "confidence": 0.0015341024845838547
+    }
+  ],
+  "primary_language": "fr",
+  "domain_hint": "human_rights",
+  "sensitivity": "high",
+  "data_quality_score": 80.0,
+  "estimated_extraction_cost": "needs_layout_model",
+  "has_toc": false,
+  "page_count": 22,
+  "corruption_indicators": [],
+  "financial_terms": [],
+  "legal_refs": [
+    "act"
+  ]
+}
