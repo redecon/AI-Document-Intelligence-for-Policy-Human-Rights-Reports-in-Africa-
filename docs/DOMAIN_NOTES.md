@@ -64,3 +64,26 @@ The following table documents specific failure modes encountered during the proc
 **Pipeline Readiness:** A five‑stage Refinery pipeline (ingest → preprocess → extract → normalize → analyze) ensures resilience across civic document types.
 
 **Key Theme:** Document intelligence for civic audits and reports demands OCR integration, layout awareness, semantic binding, and provenance metadata. These are not optional features — they are prerequisites for trustworthy analysis in field deployments.
+
+
+## Phase 1 Insights
+- **Origin detection accuracy**
+pdfplumber’s character density heuristic cleanly separated scanned from digital pdfs. The low_quality_scan flag was correctly triggered for heavily compressed pages, showing the robustness of the origin/layout detection logic.
+
+- **Language detection**
+FastText confidently identified English documents. Amharic detection (tested on a sample Amharic PDF) returned lower confidence (~0.65). This is a known limitation: for critical Amharic civic documents, a fallback to a vision‑language model (VLM) will be required to ensure reliable classification.
+
+- **Domain classification**  
+Keyword‑based civic classification worked as expected:
+
+ - Tax Expenditure report → financial_transparency
+
+ - FTA report → general (with overlapping legal and financial terms)
+
+ - CBE report → financial_transparency  
+The pluggable design means that for ambiguous cases, a VLM can be swapped in later without changing downstream agents.
+
+- **Sensitivity flagging**
+The presence of “human rights” in the FTA report automatically raised sensitivity to high, correctly reflecting its potential for misuse. Financial and procurement documents were flagged medium, while general reports defaulted to low.
+
+![alt text](docs\phase1\profiles_summary.png) 
