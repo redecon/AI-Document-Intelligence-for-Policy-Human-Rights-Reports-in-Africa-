@@ -6,6 +6,7 @@ import yaml
 from src.models.document import ExtractedDocument, ExtractionLedgerEntry, DocumentProfile
 
 
+
 class ExtractionRouter:
     def __init__(self, fast_text, layout, vision, config_path: str = "rubric/extraction_rules.yaml"):
         # Load externalised config
@@ -19,7 +20,12 @@ class ExtractionRouter:
         self.ledger_path = Path(".refinery/extraction_ledger.jsonl")
         self.ledger_path.parent.mkdir(parents=True, exist_ok=True)
 
-    def extract(self, pdf_path: str, profile: DocumentProfile) -> ExtractedDocument:
+    def extract(
+        self,
+        pdf_path: str,
+        profile: DocumentProfile,
+        pages: list[int] | None = None
+    ) -> ExtractedDocument:
         start_time = time.time()
         strategy_used = None
         confidence_score = 0.0
@@ -42,18 +48,18 @@ class ExtractionRouter:
             strategy = self.vision
             strategy_used = "vision_model"
 
-        # Run extraction
-        document = strategy.extract(pdf_path)
+        # Run initial extraction
+        document = strategy.extract(pdf_path, pages=pages)
         confidence_score = strategy.confidence(document)
         cost_info = strategy.cost_estimate(pdf_path)
         cumulative_cost += cost_info["estimated_cost_usd"]
 
-        # Escalation logic using thresholds
+        # Escalation logic
         if strategy_used == "fast_text" and confidence_score < fast_threshold:
             print("Escalating to layout-aware...")
             strategy = self.layout
             strategy_used = "layout_model"
-            document = strategy.extract(pdf_path)
+            document = strategy.extract(pdf_path, pages=pages)
             confidence_score = strategy.confidence(document)
             cost_info = strategy.cost_estimate(pdf_path)
             cumulative_cost += cost_info["estimated_cost_usd"]
@@ -63,7 +69,7 @@ class ExtractionRouter:
                 print("Escalating to vision model...")
                 strategy = self.vision
                 strategy_used = "vision_model"
-                document = strategy.extract(pdf_path)
+                document = strategy.extract(pdf_path, pages=pages)
                 confidence_score = strategy.confidence(document)
                 cost_info = strategy.cost_estimate(pdf_path)
                 cumulative_cost += cost_info["estimated_cost_usd"]

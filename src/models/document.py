@@ -26,6 +26,8 @@ class DocumentProfile(BaseModel):
 
     document_id: str = Field(..., description="Unique identifier for the document (e.g., filename or UUID).")
 
+    filename: str = Field(..., description="Original filename of the PDF in data/corpus.")
+
     origin_type: Literal['native_digital', 'scanned_image', 'mixed', 'low_quality_scan'] = Field(
         ..., description="Source type of the document."
     )

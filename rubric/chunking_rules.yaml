@@ -1,0 +1,15 @@
+rules:
+  table_never_split: true
+  clause_never_split: true
+  finding_plus_evidence_linked: true   # detect evidence markers like 'according to', 'as reported by', 'evidence shows', 'see annex'
+  figure_with_caption: true
+  quote_preserved: true
+  list_integrity: true                 # keep numbered/bulleted items together unless exceeding max tokens
+  header_carry_forward: true           # parent section headers attached as metadata to child chunks
+  cross_reference_resolution: true     # resolve 'see Section X', 'see Table Y', 'see Annex Z'
+
+  max_tokens_per_chunk: 512
+  tokenizer: cl100k_base                # OpenAI tokenizer, or the one your embedding model uses
+  overlap_tokens: 50                    # overlap when splitting chunks to preserve context
+
+  embed_text_generation: true           # for tables and figures, generate a short LLM description to improve retrieval
