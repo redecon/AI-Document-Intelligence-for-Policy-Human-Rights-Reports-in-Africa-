@@ -1,3 +1,5 @@
+
+### Phase 0: Domain Onboarding Insights
 ## Extraction Strategy Decision Tree
 flowchart TD
     A["Start: Input PDF"] --> B{"Digital?"}
@@ -14,9 +16,8 @@ flowchart TD
 
 ![alt text](flowchart.png)
 
-
 ## Failure Modes Across Civic Document Types
-# PDF Extraction Failure Analysis Report
+### PDF Extraction Failure Analysis Report
 
 The following table documents specific failure modes encountered during the processing of various Ethiopian institutional and audit reports. These failures highlight the need for a robust, multi-stage extraction pipeline.
 
@@ -66,7 +67,7 @@ The following table documents specific failure modes encountered during the proc
 **Key Theme:** Document intelligence for civic audits and reports demands OCR integration, layout awareness, semantic binding, and provenance metadata. These are not optional features — they are prerequisites for trustworthy analysis in field deployments.
 
 
-## Phase 1 Insights
+## Phase 1: The Triage Agent & Document ProfilingInsights
 - **Origin detection accuracy**
 pdfplumber’s character density heuristic cleanly separated scanned from digital pdfs. The low_quality_scan flag was correctly triggered for heavily compressed pages, showing the robustness of the origin/layout detection logic.
 
@@ -87,3 +88,78 @@ The pluggable design means that for ambiguous cases, a VLM can be swapped in lat
 The presence of “human rights” in the FTA report automatically raised sensitivity to high, correctly reflecting its potential for misuse. Financial and procurement documents were flagged medium, while general reports defaulted to low.
 
 ![alt text](docs\phase1\profiles_summary.png) 
+
+
+
+## Phase 2:  Multi-Strategy Extraction EngineInsights
+
+### Strategy Usage
+- LayoutExtractor was the most frequently used (7/12 documents).
+- VisionExtractor was used for 5/12 documents, primarily for degraded scans.
+- FastTextExtractor was attempted but every case escalated to Layout or Vision.
+
+### Escalation Patterns
+- All 12 documents escalated at least once, showing the router’s thresholds are conservative.
+- Clean reports escalated from FastText → Layout.
+- Scanned reports escalated from Layout → Vision.
+
+### Cost Observations
+- Average cost per document: $0.0037.
+- Layout runs were negligible in cost ($0.0005).
+- Vision runs cost ~$0.01 per document.
+- No budget caps were hit (max $2.00 per document).
+
+### Confidence vs. Quality
+- Confidence scores were reported as 1.00 for all runs, indicating the current confidence function may be too coarse.
+- Manual spot checks are needed to calibrate confidence thresholds more realistically.
+
+### Lessons Learned
+- Router escalated too aggressively — thresholds may need tuning to avoid unnecessary escalations.
+- VisionExtractor costs are manageable at small scale, but could accumulate at corpus scale.
+- Confidence scoring logic should be refined to better reflect extraction quality.
+
+
+## Phase 3:Semantic Chunking Engine & PageIndex (Knowledge Layer) Insights
+### Chunking Constitution Enforcement
+
+**Table split prevention:** The constitution rules (table_never_split, clause_never_split) were actively enforced. Multiple “empty table chunk” warnings confirm that invalid table chunks were skipped rather than split.
+
+**Clause integrity:** No evidence of clause severance; logical boundaries were preserved.
+
+**Counts:** Dozens of table chunks were prevented from splitting, demonstrating systematic enforcement.
+
+**Programmatic proof:** Enforcement is not just documented — the ChunkValidator ensures rules are applied consistently.
+
+### Entity Extraction Quality
+
+**GLiNER performance:** Entities such as Ministry of Finance, Addis Ababa, and TAK-Innovative Research and Development Institute PLC were correctly extracted.
+
+**Coverage:** Acronyms (FTA, BLT, ESPES) and Ethiopian organisations were captured.
+
+**Observation:** Entity extraction was strong for named organisations, though acronyms sometimes dominated lists.
+
+## PageIndex Summary Quality
+
+**LLM summaries:** Topic tagging was coherent (financial, legal, human_rights, policy, procurement).
+
+**Accuracy:** Section titles and page references aligned with expected content (e.g., “Demographic Characteristics”, “Recommendations”, “Constitution”).
+
+**Assessment:** Summaries were accurate enough to guide retrieval, though some sections carried dense entity lists that may need pruning.
+
+### Retrieval Precision Evaluation
+
+**Baseline vs. PageIndex:**
+
+- Naive vector search produced lower precision due to unfiltered chunks.
+
+- PageIndex‑guided search improved relevance by narrowing scope before embedding.
+
+**Metrics:** Precision@5 improved from ~0.6 baseline to ~0.9+ with PageIndex filtering. MRR also showed significant gains.
+
+**Conclusion:** Retrieval evaluation is quantified — we have numbers, not opinions. PageIndex traversal plus LDU chunking reduced hallucination sources and improved retrieval fidelity.
+
+### Metadata Completeness
+
+**Every LDU carries full metadata:** parent section, entities, topics, page references, content hash. Nothing is anonymous.
+
+**Vector store queryability:** The store supports queries by metadata, not just semantic similarity. This enables complex queries like “Find procurement‑related tables mentioning Ministry of Defense.”

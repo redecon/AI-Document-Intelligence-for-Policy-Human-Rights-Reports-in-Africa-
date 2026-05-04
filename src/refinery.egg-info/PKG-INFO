@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: refinery
+Version: 0.1.0
+Summary: Document Intelligence Refinery for civic audits and reports
+Author: Rediet
+Requires-Dist: pydantic>=2.0

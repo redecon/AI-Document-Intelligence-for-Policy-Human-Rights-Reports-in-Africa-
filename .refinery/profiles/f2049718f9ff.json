@@ -1,0 +1,32 @@
+{
+  "document_id": "f2049718f9ff",
+  "origin_type": "native_digital",
+  "layout_complexity": "multi_column",
+  "languages": [
+    {
+      "lang_code": "en",
+      "confidence": 0.8730701208114624
+    },
+    {
+      "lang_code": "de",
+      "confidence": 0.007381610572338104
+    },
+    {
+      "lang_code": "es",
+      "confidence": 0.00593775138258934
+    }
+  ],
+  "primary_language": "en",
+  "domain_hint": "media_investigative",
+  "sensitivity": "low",
+  "data_quality_score": 80.0,
+  "estimated_extraction_cost": "needs_layout_model",
+  "has_toc": false,
+  "page_count": 22,
+  "corruption_indicators": [],
+  "financial_terms": [],
+  "legal_refs": [
+    "proclamation",
+    "act"
+  ]
+}

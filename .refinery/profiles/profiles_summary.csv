@@ -1,0 +1,12 @@
+document_id,filename,origin_type,layout_complexity,primary_language,domain_hint,sensitivity,page_count
+8fe6f6f95487,2013-E.C-Audit-finding-information.pdf,scanned_image,single_column,unknown,general,low,3
+93547808847b,Audit Report - 2023.pdf,low_quality_scan,multi_column,unknown,general,low,95
+98300eef1410,A_HRC_51_46-EN.pdf,native_digital,multi_column,en,human_rights,high,20
+b953ed391ea1,A_HRC_51_46-FR.pdf,native_digital,multi_column,fr,human_rights,high,22
+21af89b71835,CBE_Annual_Report_2008_9.pdf,scanned_image,single_column,unknown,general,low,32
+a1fd281455d9,Ethiopia RPRF-11032024.pdf,native_digital,multi_column,en,financial_transparency,high,15
+d511c082e24c,Ethiopia.pdf,low_quality_scan,multi_column,unknown,general,low,1
+5e2d36d38ffb,fta_performance_survey_final_report_2022.pdf,native_digital,multi_column,unknown,financial_transparency,high,155
+f2049718f9ff,IDU-c8669478-c9e4-4199-88f9-b2c0a1d00396.pdf,native_digital,multi_column,en,media_investigative,low,22
+1598936aa649,tax_expenditure_ethiopia_2021_22.pdf,native_digital,multi_column,unknown,financial_transparency,medium,60
+fe02e39c3282,World_Report_2025_Ethiopia_Human-Rights_Watch.pdf,native_digital,table_heavy,en,financial_transparency,high,6

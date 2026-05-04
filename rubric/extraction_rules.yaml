@@ -1,0 +1,20 @@
+strategies:
+  fast_text:
+    confidence_threshold: 0.8
+  layout_aware:
+    confidence_threshold: 0.7
+  vision:
+    confidence_threshold: 0.5
+
+escalation:
+  enabled: true
+  max_escalations: 2
+
+budget:
+  max_cost_per_document_usd: 2.0
+  cost_tracking: true
+
+vlm:
+  provider: openrouter
+  model: google/gemini-2.0-flash-001
+  max_cost_per_page_usd: 0.01
