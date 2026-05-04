@@ -148,6 +148,7 @@ class TriageAgent:
         """
         pdf_path = Path(pdf_path)
         document_id = hashlib.sha1(pdf_path.name.encode()).hexdigest()[:12]
+        filename = pdf_path.name
 
         try:
             origin_type, layout_complexity, data_quality_score = self._detect_origin_and_layout(pdf_path)
@@ -213,6 +214,7 @@ class TriageAgent:
 
         profile = DocumentProfile(
             document_id=document_id,
+            filename=filename, 
             origin_type=origin_type,
             layout_complexity=layout_complexity,
             languages=languages,

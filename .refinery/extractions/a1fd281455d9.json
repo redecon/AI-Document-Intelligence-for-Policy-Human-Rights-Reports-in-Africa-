@@ -1,1 +1,1 @@
-{"document_id":"a1fd281455d9","pages":[{"page_number":0,"blocks":[{"type":"error","bbox":[0.0,0.0,0.0,0.0],"text":"Extraction failed: No module named 'docling'","table_json":null,"entities":null}]}]}
+{"document_id":"a1fd281455d9","pages":[{"page_number":0,"blocks":[{"type":"error","bbox":[0.0,0.0,0.0,0.0],"text":"Extraction failed: [Errno 2] No such file or directory: 'data\\\\corpus\\\\a1fd281455d9.pdf'","table_json":null,"entities":null}]}]}

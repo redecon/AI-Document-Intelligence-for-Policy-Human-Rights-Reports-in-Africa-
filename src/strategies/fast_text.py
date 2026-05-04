@@ -16,7 +16,7 @@ class FastTextExtractor(BaseExtractor):
         pages_out = []
 
         with pdfplumber.open(pdf_path) as pdf:
-            target_pages = pdf.pages if pages is None else [pdf.pages[i] for i in pages]
+            target_pages = pdf.pages if pages is None else [pdf.pages[i - 1] for i in pages]
 
             for idx, page in enumerate(target_pages, start=1):
                 blocks = []

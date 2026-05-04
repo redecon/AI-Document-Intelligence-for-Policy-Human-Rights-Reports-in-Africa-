@@ -1,4 +1,3 @@
-# scripts/batch_triage.py
 
 import logging
 import csv

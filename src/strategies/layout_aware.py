@@ -1,7 +1,7 @@
-import time
 import subprocess
 import json
 from pathlib import Path
+import fitz  # PyMuPDF
 
 from src.strategies.base import BaseExtractor
 from src.models.document import ExtractedDocument, Page, Block
@@ -15,29 +15,42 @@ class LayoutExtractor(BaseExtractor):
 
     def __init__(self, config_path: str = "rubric/extraction_rules.yaml"):
         self.config_path = config_path
-        # You could parse extraction_rules.yaml here to decide engine preference
         self.engine = "docling"  # default; fallback to marker if not installed
 
     def extract(self, pdf_path: str, pages: list[int] | None = None) -> ExtractedDocument:
-        start_time = time.time()
         pages_out = []
         document_id = Path(pdf_path).stem
 
         try:
             if self.engine == "docling":
-                from docling.document import Document
-                doc = Document.from_file(pdf_path)
+                from docling.document_converter import DocumentConverter
+                converter = DocumentConverter()
 
-                # Map Docling outputs into Blocks
-                for i, page in enumerate(doc.pages, start=1):
+                # If batching requested, create a temporary PDF with only those pages
+                if pages:
+                    tmp_path = Path(pdf_path).with_suffix(".batch.pdf")
+                    doc_in = fitz.open(pdf_path)
+                    doc_out = fitz.open()
+                    for p in pages:
+                        doc_out.insert_pdf(doc_in, from_page=p-1, to_page=p-1)
+                    doc_out.save(tmp_path)
+                    doc_in.close()
+                    doc_out.close()
+                    result = converter.convert(str(tmp_path))
+                else:
+                    result = converter.convert(pdf_path)
+
+                doc = result.document
+                for page in doc.pages:
                     blocks = []
-                    for t in page.texts:
-                        blocks.append(Block(type="text", bbox=t.bbox, text=t.content))
-                    for tbl in page.tables:
-                        blocks.append(Block(type="table", bbox=tbl.bbox, table_json=tbl.to_dict()))
-                    for pic in page.pictures:
-                        blocks.append(Block(type="figure", bbox=pic.bbox, text=None))
-                    pages_out.append(Page(page_number=i, blocks=blocks))
+                    for b in page.blocks:
+                        if b.type == "text":
+                            blocks.append(Block(type="text", bbox=b.bbox, text=getattr(b, "text", None)))
+                        elif b.type == "table":
+                            blocks.append(Block(type="table", bbox=b.bbox, table_json=getattr(b, "table", None)))
+                        elif b.type == "picture":
+                            blocks.append(Block(type="figure", bbox=b.bbox, text=None))
+                    pages_out.append(Page(page_number=page.page_no, blocks=blocks))
 
             else:
                 # Marker fallback
@@ -59,7 +72,6 @@ class LayoutExtractor(BaseExtractor):
                     pages_out.append(Page(page_number=i, blocks=blocks))
 
         except Exception as e:
-            # Graceful error handling
             blocks = [Block(type="error", bbox=[0, 0, 0, 0], text=f"Extraction failed: {e}")]
             pages_out.append(Page(page_number=0, blocks=blocks))
 
